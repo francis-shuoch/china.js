@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>中国省份人均GDP（元）</title>
+<link href="./china.css" media="screen, projection" rel="stylesheet" type="text/css">
+<link href="/stylesheets/skeleton.css" media="screen, projection" rel="stylesheet" type="text/css">
+<style type="text/css">
+	.legend {
+		position: absolute;
+		bottom: 50px;
+		text-align: center;
+	}
+
+	.legend p {
+		position: static;
+		margin-bottom: 5px;
+	}
+
+	.legend .color-bar {
+		position: static;
+	}
+
+	.color-bar {
+		display: inline-block;
+		width: 20px;
+		height: 200px;
+		background: linear-gradient(to top, #ffffcc 0%, #0051ba 100%);		
+	}
+</style>
+<body>
+<div class="container">
+	<div class="ten columns">
+		<div id="tooltip"></div><!-- div to hold tooltip. -->
+		<svg id="chinaProvinces"></svg> <!-- svg to hold the map. -->
+	</div>
+	<div class="two columns">
+		<dl>中国省份人均GDP</dl>
+		<dl>（元）2013</dl>
+		<div class="legend">
+			<p>565920元</p>
+			<div class="color-bar"></div>
+			<p>22922元</p>
+		</div>
+	</div>
+</div>
+How it is done using <a href="https://github.com/francis-liberty/china.js">china.js</a> :
+<script src="https://gist.github.com/francis-liberty/61f4b4327b3a24172b27.js"></script>
+	
+<script type="text/javascript" src="/javascripts/d3.min.js"></script>
+<script src="./china.js"></script> <!-- creates uStates. -->
+<script>
+
+	function tooltipHtml(n, d){	/* function to create html content string in tooltip div. */
+		return "<h4>"+n+"</h4>" + "<span>" + d.gdpp +"元</span>";
+	}
+
+	d3.csv("china.csv", function (e, rows) {
+		var sampleData = {};
+
+		var m = d3.max(rows, function (d) { return +d.gdpp; });
+		rows.forEach(function (d) {
+			sampleData[d.id] = {
+				gdpp: d.gdpp,
+				color: d3.interpolate("#ffffcc", "#0051ba")(Math.pow(+d.gdpp / m, 0.45))
+			};
+		});
+
+		/* draw provinces on id #chinaProvinces */	
+		var ch = china();
+		ch.scale(0.8)
+			.height(600)
+			.width(800)
+			.draw("#chinaProvinces", sampleData, tooltipHtml);
+	});
+
+</script>
+</body>

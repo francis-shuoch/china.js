@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>中国省份人口密度（人/km2）</title>
+<link href="./china.css" media="screen, projection" rel="stylesheet" type="text/css">
+<link href="/stylesheets/skeleton.css" media="screen, projection" rel="stylesheet" type="text/css">
+<style type="text/css">
+	.legend {
+		position: absolute;
+		bottom: 50px;
+		text-align: center;
+	}
+
+	.legend p {
+		position: static;
+		margin-bottom: 5px;
+	}
+
+	.legend .color-bar {
+		position: static;
+	}
+
+	.color-bar {
+		display: inline-block;
+		width: 20px;
+		height: 200px;
+		background: linear-gradient(to top, #ffffcc 0%, #800026 100%);		
+	}
+
+	.container {
+		position: relative;
+	}
+
+</style>
+<body>
+<div class="container">
+	<div class="ten columns">
+		<div id="tooltip"></div><!-- div to hold tooltip. -->
+		<svg id="chinaProvinces"></svg> <!-- svg to hold the map. -->
+	</div>
+	<div class="two columns">
+		<dl>中国省份人口密度</dl>
+		<dl>（人/km2）2013</dl>
+		<div class="legend">
+			<p>19,044.82 人/km2</p>
+			<div class="color-bar"></div>
+			<p>2.44 人/km2</p>
+		</div>
+	</div>
+</div>
+How it is done using <a href="https://github.com/francis-liberty/china.js">china.js</a> :
+<script src="https://gist.github.com/francis-liberty/e5c49d4c1331634dc9b7.js"></script>
+
+<script type="text/javascript" src="/javascripts/d3.min.js"></script>
+<script src="./china.js"></script> <!-- creates uStates. -->
+<script>
+
+	function tooltipHtml(d){	/* function to create html content string in tooltip div. */
+		return "<h4>"+d.name+"</h4>" + "<span>" + d.dense +" 人/km2</span>";
+	}
+
+	d3.csv("china.csv", function (e, rows) {
+		var sampleData = {};
+
+		var m = d3.max(rows, function (d) { return +d.dense; });
+		rows.forEach(function (d) {
+			sampleData[d.id] = {
+				dense: d.dense,
+				color: d3.interpolate("#ffffcc", "#800026")(Math.pow(+d.dense / m, 0.35))
+			};
+		});
+
+		/* draw provinces on id #chinaProvinces */	
+		var ch = china();
+		ch.scale(0.8)
+			.height(600)
+			.width(800)
+			.tooltipHtml(tooltipHtml)
+			.draw("#chinaProvinces", sampleData);
+	});
+
+</script>
+</body>
