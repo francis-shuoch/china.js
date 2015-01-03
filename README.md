@@ -78,7 +78,7 @@ Currently we only support Simplified Chinese (`"cn"`), Traditional Chinese (`"tw
 __tooltipHtml__: a function, that return a tooltip html element to display the information about a province. It accepts one argument which is the javascript object representing a province along with the options you passed in `draw()` method. By default it will display the province name.
 
 # provinces
-![provinces-name](provinces.png)
+<a href="https://github.com/francis-liberty/Mapglyphs-China">![provinces-name](provinces.png)</a>
 
 for each icon, the last line is the `id` used to distinguish each province. For example, to change the background color of Heilongjiang(黑龙江) province to black, use 
 
@@ -90,5 +90,5 @@ ch.draw("#china", {
 
 # Showcase
 
-[China Provinces GDP per captial year 2013]()
-[China Provinces Population Density year 2013]()
+* [China Provinces Population Density year 2013](http://francis-liberty.github.io/blocks/china-js/china-pop-density.html)
+* [China Provinces GDP per captial year 2013](http://francis-liberty.github.io/blocks/china-js/china-gdpp.html)
